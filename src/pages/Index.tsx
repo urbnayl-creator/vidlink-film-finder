@@ -30,35 +30,41 @@ const Index = () => {
     queryFn: () => getTopRated("tv"),
   });
 
-  const heroMovie = trending?.results?.[0] || null;
+  const heroMovies = trending?.results?.slice(0, 5) || [];
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <HeroBanner movie={heroMovie} />
-        <div className="container mx-auto space-y-10 py-10">
+        <HeroBanner movies={heroMovies} />
+        <div className="max-w-[1280px] mx-auto space-y-10 py-10">
           <MediaCarousel
-            title="🔥 Trending Now"
-            items={trending?.results?.slice(1) || []}
+            title="Trending Movies"
+            subtitle="Stay on the pulse of what's hot in the movie scene."
+            items={trending?.results?.filter(m => m.media_type === 'movie' || !m.media_type).slice(0, 20) || []}
+            type="movie"
           />
           <MediaCarousel
-            title="🎬 Popular Movies"
+            title="Popular Movies"
+            subtitle="The most popular movies right now."
             items={popularMovies?.results || []}
             type="movie"
           />
           <MediaCarousel
-            title="📺 Popular TV Shows"
+            title="Popular TV Shows"
+            subtitle="Top picks from the TV world."
             items={popularTv?.results || []}
             type="tv"
           />
           <MediaCarousel
-            title="⭐ Top Rated Movies"
+            title="Top Rated Movies"
+            subtitle="Critically acclaimed masterpieces."
             items={topMovies?.results || []}
             type="movie"
           />
           <MediaCarousel
-            title="🏆 Top Rated TV Shows"
+            title="Top Rated TV Shows"
+            subtitle="The best shows ever made."
             items={topTv?.results || []}
             type="tv"
           />

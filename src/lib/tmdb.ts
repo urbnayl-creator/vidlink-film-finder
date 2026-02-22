@@ -1,4 +1,4 @@
-const API_KEY = "YOUR_TMDB_API_KEY"; // Replace with your TMDB API key
+const API_KEY = "0771dff053c430ce7b915a696b1ef9ac";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMG_BASE = "https://image.tmdb.org/t/p";
 
