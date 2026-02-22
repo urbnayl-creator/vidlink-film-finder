@@ -47,13 +47,13 @@ const MovieDetail = () => {
       <Header />
 
       {/* Backdrop */}
-      <div className="relative h-[50vh] min-h-[350px]">
+      <div className="relative h-[40vh] sm:h-[50vh] min-h-[280px] sm:min-h-[350px]">
         <img src={backdrop(movie.backdrop_path)} alt={movie.title} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
       </div>
 
       {/* Content */}
-      <div className="max-w-[1280px] mx-auto px-6 -mt-52 relative z-10 pb-16">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 -mt-32 sm:-mt-52 relative z-10 pb-16">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Poster */}
           <div className="shrink-0 hidden md:block">
@@ -65,7 +65,7 @@ const MovieDetail = () => {
           </div>
 
           {/* Info */}
-          <div className="flex-1 pt-16 md:pt-20">
+          <div className="flex-1 pt-8 sm:pt-16 md:pt-20">
             {/* Genre pills + score */}
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="px-2.5 py-1 text-xs font-medium border border-border rounded-md text-foreground">
@@ -78,7 +78,7 @@ const MovieDetail = () => {
               ))}
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
               {movie.title}
             </h1>
 
@@ -87,15 +87,15 @@ const MovieDetail = () => {
             </p>
 
             {/* Buttons */}
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex flex-wrap items-center gap-3 mb-8">
               <Link
                 to={`/watch/movie/${movie.id}`}
-                className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
+                className="btn-glow"
               >
                 <Play className="w-4 h-4" />
                 Play Now
               </Link>
-              <button className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors">
+              <button className="btn-glow">
                 <Plus className="w-4 h-4" />
                 Watchlist
               </button>

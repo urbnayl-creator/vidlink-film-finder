@@ -28,7 +28,7 @@ const Watch = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="pt-14">
-        <div className="max-w-[1280px] mx-auto px-6 py-4">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center gap-3 mb-3">
             <Link
               to={`/${type}/${mediaId}`}
