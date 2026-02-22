@@ -68,3 +68,58 @@
     scrollbar-width: none;
   }
 }
+
+/* Animated glow button */
+@layer components {
+  .btn-glow {
+    @apply relative inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium text-foreground transition-all duration-300 overflow-hidden;
+    border: 1.5px solid hsl(0 0% 28%);
+    background: hsl(0 0% 8%);
+  }
+
+  .btn-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 9999px;
+    padding: 1.5px;
+    background: linear-gradient(
+      135deg,
+      hsl(0 0% 40%) 0%,
+      hsl(0 0% 20%) 30%,
+      hsl(0 0% 40%) 50%,
+      hsl(0 0% 20%) 70%,
+      hsl(0 0% 40%) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease, background-position 0.4s ease;
+  }
+
+  .btn-glow:hover {
+    border-color: hsl(0 0% 50%);
+    background: hsl(0 0% 12%);
+    box-shadow: 0 0 20px hsl(0 0% 100% / 0.06), inset 0 0 20px hsl(0 0% 100% / 0.03);
+    transform: scale(1.02);
+  }
+
+  .btn-glow:hover::before {
+    opacity: 1;
+    background-position: 100% 100%;
+  }
+
+  .btn-glow:active {
+    transform: scale(0.98);
+  }
+
+  /* Glassmorphism navbar */
+  .glass-nav {
+    background: hsl(0 0% 5% / 0.6);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid hsl(0 0% 100% / 0.06);
+  }
+}

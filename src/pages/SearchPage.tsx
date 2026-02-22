@@ -21,7 +21,7 @@ const SearchPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-[1280px] mx-auto px-6 pt-24 pb-16">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 pt-24 pb-16">
         <h1 className="text-2xl font-bold text-foreground mb-2">
           {query ? `Results for "${query}"` : "Search"}
         </h1>
@@ -35,7 +35,7 @@ const SearchPage = () => {
         ) : results.length === 0 && query ? (
           <p className="text-muted-foreground">No results found.</p>
         ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
             {results.map((item) => (
               <MediaCard key={item.id} item={item} />
             ))}

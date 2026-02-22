@@ -29,32 +29,32 @@ const MediaCarousel = ({ title, subtitle, items, type }: MediaCarouselProps) => 
 
   return (
     <section className="relative">
-      <div className="flex items-end justify-between mb-4 px-6 md:px-0">
+      <div className="flex items-end justify-between mb-3 sm:mb-4 px-4 sm:px-6 md:px-0">
         <div>
-          <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-          {subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
+          <h2 className="text-base sm:text-lg font-semibold text-foreground">{title}</h2>
+          {subtitle && <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 hidden sm:block">{subtitle}</p>}
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground mr-2">{page + 1} / {totalPages}</span>
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="text-xs text-muted-foreground mr-1 sm:mr-2 hidden sm:inline">{page + 1} / {totalPages}</span>
           <button
             onClick={() => scroll("left")}
             disabled={page === 0}
-            className="p-1.5 border border-border rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1 sm:p-1.5 border border-border rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => scroll("right")}
             disabled={page >= totalPages - 1}
-            className="p-1.5 border border-border rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1 sm:p-1.5 border border-border rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>
       <div
         ref={scrollRef}
-        className="flex gap-3 overflow-x-auto scrollbar-hide px-6 md:px-0 pb-2"
+        className="flex gap-2.5 sm:gap-3 overflow-x-auto scrollbar-hide px-4 sm:px-6 md:px-0 pb-2"
       >
         {items.map((item) => (
           <MediaCard key={item.id} item={item} type={type} />

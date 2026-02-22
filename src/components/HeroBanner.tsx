@@ -28,7 +28,7 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
   }, [current, movies.length, goTo]);
 
   if (!movies.length) {
-    return <div className="relative h-[65vh] bg-secondary" />;
+    return <div className="relative h-[60vh] sm:h-[65vh] bg-secondary" />;
   }
 
   const movie = movies[current];
@@ -36,8 +36,7 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
   const mediaType = movie.media_type || "movie";
 
   return (
-    <div className="relative h-[65vh] min-h-[480px] overflow-hidden">
-      {/* Backdrop image */}
+    <div className="relative h-[60vh] sm:h-[65vh] min-h-[420px] overflow-hidden">
       <div className={`absolute inset-0 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         <img
           src={backdrop(movie.backdrop_path)}
@@ -46,30 +45,28 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
         />
       </div>
 
-      {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/30" />
       <div className="absolute inset-0 bg-gradient-to-r from-background/20 to-background/20" />
 
-      {/* Content — centered */}
-      <div className="relative h-full max-w-[1280px] mx-auto px-6 flex flex-col items-center justify-end pb-16">
+      <div className="relative h-full max-w-[1280px] mx-auto px-4 sm:px-6 flex flex-col items-center justify-end pb-12 sm:pb-16">
         <div className={`text-center max-w-2xl transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-3 sm:mb-4 leading-tight px-2">
             {title}
           </h1>
-          <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-8 line-clamp-3 px-4">
+          <p className="text-muted-foreground text-xs sm:text-sm md:text-base leading-relaxed mb-6 sm:mb-8 line-clamp-2 sm:line-clamp-3 px-4">
             {movie.overview}
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link
               to={`/watch/${mediaType}/${movie.id}`}
-              className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
+              className="btn-glow"
             >
               <Play className="w-4 h-4" />
               Play Now
             </Link>
             <Link
               to={`/${mediaType}/${movie.id}`}
-              className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
+              className="btn-glow"
             >
               Details
               <ArrowRight className="w-4 h-4" />
@@ -77,9 +74,8 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
           </div>
         </div>
 
-        {/* Dots indicator */}
         {movies.length > 1 && (
-          <div className="flex items-center gap-2 mt-6">
+          <div className="flex items-center gap-2 mt-5 sm:mt-6">
             {movies.map((_, i) => (
               <button
                 key={i}
