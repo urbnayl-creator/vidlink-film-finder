@@ -27,20 +27,20 @@ const Watch = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="pt-16">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 mb-4">
+      <div className="pt-14">
+        <div className="max-w-[1280px] mx-auto px-6 py-4">
+          <div className="flex items-center gap-3 mb-3">
             <Link
               to={`/${type}/${mediaId}`}
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" /> Back
+              <ArrowLeft className="w-4 h-4" /> Back to details
             </Link>
-            <h1 className="font-display text-lg font-semibold text-foreground truncate">
-              {title}
-              {!isMovie && ` — S${season} E${episode}`}
-            </h1>
           </div>
+          <h1 className="text-lg font-semibold text-foreground mb-4">
+            {title}
+            {!isMovie && <span className="text-muted-foreground font-normal"> — Season {season}, Episode {episode}</span>}
+          </h1>
         </div>
         <div className="w-full aspect-video max-h-[80vh] bg-black">
           <iframe

@@ -1,13 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import Header from "@/components/Header";
 import MediaCarousel from "@/components/MediaCarousel";
 import { getMovieDetail, getCredits, getRecommendations, backdrop, img } from "@/lib/tmdb";
-import { Play, Star, Clock, Calendar } from "lucide-react";
+import { Play, Plus, Star, Clock, Calendar } from "lucide-react";
 
 const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const movieId = Number(id);
+  const [activeTab, setActiveTab] = useState("overview");
 
   const { data: movie } = useQuery({
     queryKey: ["movie", movieId],
@@ -31,94 +33,159 @@ const MovieDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="pt-16 flex items-center justify-center h-[60vh]">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="pt-14 flex items-center justify-center h-[60vh]">
+          <div className="w-6 h-6 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin" />
         </div>
       </div>
     );
   }
 
+  const tabs = ["Overview", "Credits", "Recommendations"];
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="relative h-[60vh] min-h-[400px]">
+
+      {/* Backdrop */}
+      <div className="relative h-[50vh] min-h-[350px]">
         <img src={backdrop(movie.backdrop_path)} alt={movie.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 hero-gradient" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
       </div>
 
-      <div className="container mx-auto px-4 -mt-40 relative z-10 pb-16">
+      {/* Content */}
+      <div className="max-w-[1280px] mx-auto px-6 -mt-52 relative z-10 pb-16">
         <div className="flex flex-col md:flex-row gap-8">
-          <img
-            src={img(movie.poster_path, "w500")}
-            alt={movie.title}
-            className="w-56 rounded-xl shadow-2xl shrink-0 self-start hidden md:block"
-          />
-          <div className="flex-1 animate-fade-in">
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {movie.title}
-            </h1>
-            {movie.tagline && (
-              <p className="text-muted-foreground italic mb-4">"{movie.tagline}"</p>
-            )}
-            <div className="flex flex-wrap items-center gap-4 mb-4 text-sm">
-              <span className="flex items-center gap-1 text-primary">
-                <Star className="w-4 h-4 fill-primary" /> {movie.vote_average?.toFixed(1)}
+          {/* Poster */}
+          <div className="shrink-0 hidden md:block">
+            <img
+              src={img(movie.poster_path, "w500")}
+              alt={movie.title}
+              className="w-48 rounded-lg shadow-2xl border border-border"
+            />
+          </div>
+
+          {/* Info */}
+          <div className="flex-1 pt-16 md:pt-20">
+            {/* Genre pills + score */}
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="px-2.5 py-1 text-xs font-medium border border-border rounded-md text-foreground">
+                {movie.vote_average?.toFixed(1)}
               </span>
-              {movie.runtime && (
-                <span className="flex items-center gap-1 text-muted-foreground">
-                  <Clock className="w-4 h-4" /> {movie.runtime} min
-                </span>
-              )}
-              <span className="flex items-center gap-1 text-muted-foreground">
-                <Calendar className="w-4 h-4" /> {movie.release_date?.slice(0, 4)}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2 mb-6">
               {movie.genres?.map((g) => (
-                <span key={g.id} className="px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground">
+                <span key={g.id} className="px-2.5 py-1 text-xs border border-border rounded-md text-muted-foreground">
                   {g.name}
                 </span>
               ))}
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-6 max-w-2xl">
+
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+              {movie.title}
+            </h1>
+
+            <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-2xl">
               {movie.overview}
             </p>
-            <Link
-              to={`/watch/movie/${movie.id}`}
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3 rounded-full transition-colors"
-            >
-              <Play className="w-5 h-5 fill-current" /> Watch Now
-            </Link>
 
-            {credits?.cast && credits.cast.length > 0 && (
-              <div className="mt-10">
-                <h3 className="font-display text-lg font-semibold text-foreground mb-4">Cast</h3>
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
-                  {credits.cast.slice(0, 10).map((person) => (
-                    <div key={person.id} className="shrink-0 text-center w-20">
-                      <div className="w-16 h-16 rounded-full overflow-hidden mx-auto bg-secondary">
-                        {person.profile_path ? (
-                          <img src={img(person.profile_path, "w185")} alt={person.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">N/A</div>
-                        )}
-                      </div>
-                      <p className="text-xs text-foreground mt-1 truncate">{person.name}</p>
+            {/* Buttons */}
+            <div className="flex items-center gap-3 mb-8">
+              <Link
+                to={`/watch/movie/${movie.id}`}
+                className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
+              >
+                <Play className="w-4 h-4" />
+                Play Now
+              </Link>
+              <button className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors">
+                <Plus className="w-4 h-4" />
+                Watchlist
+              </button>
+            </div>
+
+            {/* Tabs */}
+            <div className="border-b border-border mb-6">
+              <div className="flex gap-0">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab.toLowerCase())}
+                    className={`px-4 py-2.5 text-sm font-medium transition-colors relative ${
+                      activeTab === tab.toLowerCase()
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {tab}
+                    {activeTab === tab.toLowerCase() && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Tab content */}
+            {activeTab === "overview" && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 max-w-lg">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Release Date</p>
+                    <p className="text-sm text-foreground">{movie.release_date}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Status</p>
+                    <p className="text-sm text-foreground">{movie.status}</p>
+                  </div>
+                  {movie.runtime && (
+                    <div>
+                      <p className="text-xs text-muted-foreground">Runtime</p>
+                      <p className="text-sm text-foreground">{movie.runtime} min</p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-xs text-muted-foreground">Rating</p>
+                    <p className="text-sm text-foreground">{movie.vote_average?.toFixed(1)} / 10</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "credits" && credits?.cast && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {credits.cast.slice(0, 12).map((person) => (
+                  <div key={person.id} className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-secondary shrink-0">
+                      {person.profile_path ? (
+                        <img src={img(person.profile_path, "w185")} alt={person.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">?</div>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm text-foreground truncate">{person.name}</p>
                       <p className="text-xs text-muted-foreground truncate">{person.character}</p>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === "recommendations" && recs?.results && (
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+                {recs.results.slice(0, 12).map((item) => (
+                  <Link key={item.id} to={`/movie/${item.id}`} className="group">
+                    <div className="aspect-[2/3] rounded-lg overflow-hidden bg-secondary">
+                      <img
+                        src={img(item.poster_path)}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  </Link>
+                ))}
               </div>
             )}
           </div>
         </div>
-
-        {recs?.results && recs.results.length > 0 && (
-          <div className="mt-16">
-            <MediaCarousel title="Recommended" items={recs.results} type="movie" />
-          </div>
-        )}
       </div>
     </div>
   );

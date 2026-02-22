@@ -1,65 +1,96 @@
 import { Link } from "react-router-dom";
-import { Play, Star, Info } from "lucide-react";
+import { Play, ArrowRight } from "lucide-react";
 import { backdrop, type Movie } from "@/lib/tmdb";
+import { useState, useEffect, useCallback } from "react";
 
 interface HeroBannerProps {
-  movie: Movie | null;
+  movies: Movie[];
 }
 
-const HeroBanner = ({ movie }: HeroBannerProps) => {
-  if (!movie) {
-    return (
-      <div className="relative h-[70vh] bg-secondary animate-pulse" />
-    );
+const HeroBanner = ({ movies }: HeroBannerProps) => {
+  const [current, setCurrent] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const goTo = useCallback((index: number) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrent(index);
+      setIsTransitioning(false);
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    if (movies.length <= 1) return;
+    const interval = setInterval(() => {
+      goTo((current + 1) % movies.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [current, movies.length, goTo]);
+
+  if (!movies.length) {
+    return <div className="relative h-[65vh] bg-secondary" />;
   }
 
+  const movie = movies[current];
   const title = movie.title || movie.name || "";
   const mediaType = movie.media_type || "movie";
 
   return (
-    <div className="relative h-[70vh] min-h-[500px]">
-      <div className="absolute inset-0">
+    <div className="relative h-[65vh] min-h-[480px] overflow-hidden">
+      {/* Backdrop image */}
+      <div className={`absolute inset-0 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         <img
           src={backdrop(movie.backdrop_path)}
           alt={title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 hero-gradient" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
       </div>
 
-      <div className="relative h-full container mx-auto px-4 flex items-end pb-16">
-        <div className="max-w-xl animate-fade-in">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="flex items-center gap-1 text-primary text-sm font-semibold">
-              <Star className="w-4 h-4 fill-primary" />
-              {movie.vote_average?.toFixed(1)}
-            </span>
-            <span className="text-muted-foreground text-sm">
-              {(movie.release_date || movie.first_air_date || "").slice(0, 4)}
-            </span>
-          </div>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-3 leading-tight">
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/30" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/20 to-background/20" />
+
+      {/* Content — centered */}
+      <div className="relative h-full max-w-[1280px] mx-auto px-6 flex flex-col items-center justify-end pb-16">
+        <div className={`text-center max-w-2xl transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
             {title}
           </h1>
-          <p className="text-muted-foreground text-sm md:text-base line-clamp-3 mb-6">
+          <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-8 line-clamp-3 px-4">
             {movie.overview}
           </p>
-          <div className="flex gap-3">
+          <div className="flex items-center justify-center gap-3">
             <Link
               to={`/watch/${mediaType}/${movie.id}`}
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-3 rounded-full transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
             >
-              <Play className="w-5 h-5 fill-current" /> Watch Now
+              <Play className="w-4 h-4" />
+              Play Now
             </Link>
             <Link
               to={`/${mediaType}/${movie.id}`}
-              className="inline-flex items-center gap-2 glass hover:bg-white/10 text-foreground font-semibold px-6 py-3 rounded-full transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2.5 border border-border rounded-lg text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
             >
-              <Info className="w-5 h-5" /> Details
+              Details
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
+
+        {/* Dots indicator */}
+        {movies.length > 1 && (
+          <div className="flex items-center gap-2 mt-6">
+            {movies.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                  i === current ? 'bg-foreground w-4' : 'bg-muted-foreground/40 hover:bg-muted-foreground/70'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
