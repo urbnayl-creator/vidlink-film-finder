@@ -67,6 +67,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .duration-400 {
+    transition-duration: 400ms;
+  }
 }
 
 /* Animated glow button */

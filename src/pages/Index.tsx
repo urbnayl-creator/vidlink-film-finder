@@ -2,7 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/Header";
 import HeroBanner from "@/components/HeroBanner";
 import MediaCarousel from "@/components/MediaCarousel";
-import { getTrending, getPopular, getTopRated } from "@/lib/tmdb";
+import AdBlockPopup from "@/components/AdBlockPopup";
+import { getTrending, getPopular, getTopRated, getAnime } from "@/lib/tmdb";
 
 const Index = () => {
   const { data: trending } = useQuery({
@@ -30,11 +31,17 @@ const Index = () => {
     queryFn: () => getTopRated("tv"),
   });
 
+  const { data: anime } = useQuery({
+    queryKey: ["anime"],
+    queryFn: () => getAnime(),
+  });
+
   const heroMovies = trending?.results?.slice(0, 5) || [];
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AdBlockPopup />
       <main>
         <HeroBanner movies={heroMovies} />
         <div className="max-w-[1280px] mx-auto space-y-10 py-10">
@@ -54,6 +61,12 @@ const Index = () => {
             title="Popular TV Shows"
             subtitle="Top picks from the TV world."
             items={popularTv?.results || []}
+            type="tv"
+          />
+          <MediaCarousel
+            title="Anime"
+            subtitle="Top anime series from Japan."
+            items={anime?.results || []}
             type="tv"
           />
           <MediaCarousel
