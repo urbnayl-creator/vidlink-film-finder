@@ -1,16 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Home, Film, Tv, ChevronDown, User, Menu, X } from "lucide-react";
+import { Search, Home, Film, Tv, ChevronDown, User, Menu, X, LogOut, Heart } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [query, setQuery] = useState("");
   const [moviesOpen, setMoviesOpen] = useState(false);
   const [tvOpen, setTvOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>(null);
   const moviesRef = useRef<HTMLDivElement>(null);
   const tvRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLInputElement>(null);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -21,11 +25,14 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    if (searchExpanded && searchRef.current) searchRef.current.focus();
+  }, [searchExpanded]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +40,7 @@ const Header = () => {
       navigate(`/search?q=${encodeURIComponent(query.trim())}`);
       setQuery("");
       setMobileMenuOpen(false);
+      setSearchExpanded(false);
     }
   };
 
@@ -64,15 +72,13 @@ const Header = () => {
                   >
                     <Film className="w-3.5 h-3.5" />
                     <span>Movies</span>
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${moviesOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${moviesOpen ? 'rotate-180' : ''}`} />
                   </button>
-                  {moviesOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50">
-                      <Link to="/movies" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Movies</Link>
-                      <Link to="/movies?tab=top" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Top Rated</Link>
-                      <Link to="/movies?tab=trending" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Trending</Link>
-                    </div>
-                  )}
+                  <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-300 origin-top ${moviesOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
+                    <Link to="/movies" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Movies</Link>
+                    <Link to="/movies?tab=top" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Top Rated</Link>
+                    <Link to="/movies?tab=trending" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Trending</Link>
+                  </div>
                 </div>
 
                 <div ref={tvRef} className="relative">
@@ -82,47 +88,58 @@ const Header = () => {
                   >
                     <Tv className="w-3.5 h-3.5" />
                     <span>TV Shows</span>
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${tvOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${tvOpen ? 'rotate-180' : ''}`} />
                   </button>
-                  {tvOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50">
-                      <Link to="/tv" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Shows</Link>
-                      <Link to="/tv?tab=top" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Top Rated</Link>
-                      <Link to="/tv?tab=trending" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Trending</Link>
-                    </div>
-                  )}
+                  <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-300 origin-top ${tvOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
+                    <Link to="/tv" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Shows</Link>
+                    <Link to="/tv?tab=top" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Top Rated</Link>
+                    <Link to="/tv?tab=trending" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Trending</Link>
+                  </div>
                 </div>
               </nav>
             </div>
 
             {/* Right */}
             <div className="flex items-center gap-2">
-              {/* Desktop search */}
-              <form onSubmit={handleSearch} className="relative hidden sm:block">
-                <div className="flex items-center bg-secondary/30 border border-border/50 rounded-full overflow-hidden">
-                  <Search className="w-3.5 h-3.5 text-muted-foreground ml-3" />
-                  <input
-                    ref={searchRef}
-                    type="text"
-                    placeholder="Search..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground px-2.5 py-1.5 w-36 lg:w-48 focus:w-52 lg:focus:w-64 transition-all focus:outline-none"
-                  />
+              {/* Desktop search - slide left */}
+              <div className="relative hidden sm:flex items-center">
+                <form onSubmit={handleSearch} className={`flex items-center transition-all duration-400 ease-out overflow-hidden ${searchExpanded ? 'w-52 lg:w-64' : 'w-0'}`}>
+                  <div className="flex items-center bg-secondary/30 border border-border/50 rounded-full overflow-hidden w-full">
+                    <input
+                      ref={searchRef}
+                      type="text"
+                      placeholder="Search..."
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onBlur={() => { if (!query) setSearchExpanded(false); }}
+                      className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground px-3 py-1.5 w-full focus:outline-none"
+                    />
+                  </div>
+                </form>
+                <button
+                  onClick={() => setSearchExpanded(!searchExpanded)}
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Desktop user button */}
+              {user ? (
+                <div className="hidden sm:flex items-center gap-1">
+                  <Link to="/watchlist" className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                    <Heart className="w-4 h-4" />
+                  </Link>
+                  <button onClick={() => signOut()} className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                    <LogOut className="w-4 h-4" />
+                  </button>
                 </div>
-              </form>
-
-              {/* Mobile search icon */}
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="sm:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-
-              <button className="hidden sm:flex p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
-                <User className="w-4 h-4" />
-              </button>
+              ) : (
+                <Link to="/auth" className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                  <User className="w-4 h-4" />
+                  <span>Login</span>
+                </Link>
+              )}
 
               {/* Mobile hamburger */}
               <button
@@ -134,25 +151,16 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </header>
 
-      {/* Mobile menu overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] md:hidden">
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-          <div className="absolute top-0 right-0 w-72 h-full glass-nav border-l border-border/30 p-6 flex flex-col gap-6 animate-slide-in-right">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-foreground">Menu</span>
-              <button onClick={() => setMobileMenuOpen(false)} className="p-1 text-muted-foreground hover:text-foreground">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
+        {/* Mobile menu - slides down from navbar */}
+        <div className={`md:hidden transition-all duration-400 ease-out overflow-hidden mx-4 ${mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="glass-nav rounded-b-2xl border-t-0 rounded-t-none px-5 pb-5 pt-3 space-y-4">
             {/* Mobile search */}
             <form onSubmit={handleSearch}>
               <div className="flex items-center bg-secondary/30 border border-border/50 rounded-full overflow-hidden">
                 <Search className="w-3.5 h-3.5 text-muted-foreground ml-3" />
                 <input
+                  ref={mobileSearchRef}
                   type="text"
                   placeholder="Search..."
                   value={query}
@@ -172,10 +180,26 @@ const Header = () => {
               <Link to="/tv" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                 <Tv className="w-4 h-4" /> TV Shows
               </Link>
+
+              {/* Login/Logout in mobile menu */}
+              {user ? (
+                <>
+                  <Link to="/watchlist" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+                    <Heart className="w-4 h-4" /> Watchlist
+                  </Link>
+                  <button onClick={() => { signOut(); setMobileMenuOpen(false); }} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors w-full text-left">
+                    <LogOut className="w-4 h-4" /> Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+                  <User className="w-4 h-4" /> Login / Sign Up
+                </Link>
+              )}
             </nav>
           </div>
         </div>
-      )}
+      </header>
     </>
   );
 };

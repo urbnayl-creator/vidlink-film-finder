@@ -14,7 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      watch_history: {
+        Row: {
+          episode_number: number | null
+          id: string
+          media_id: number
+          media_type: string
+          poster_path: string | null
+          season_number: number | null
+          title: string
+          user_id: string
+          watched_at: string
+        }
+        Insert: {
+          episode_number?: number | null
+          id?: string
+          media_id: number
+          media_type: string
+          poster_path?: string | null
+          season_number?: number | null
+          title: string
+          user_id: string
+          watched_at?: string
+        }
+        Update: {
+          episode_number?: number | null
+          id?: string
+          media_id?: number
+          media_type?: string
+          poster_path?: string | null
+          season_number?: number | null
+          title?: string
+          user_id?: string
+          watched_at?: string
+        }
+        Relationships: []
+      }
+      watchlist: {
+        Row: {
+          added_at: string
+          id: string
+          media_id: number
+          media_type: string
+          poster_path: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          media_id: number
+          media_type: string
+          poster_path?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          media_id?: number
+          media_type?: string
+          poster_path?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

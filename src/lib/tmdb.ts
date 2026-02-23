@@ -95,6 +95,14 @@ export const searchMulti = (query: string) =>
 export const getRecommendations = (type: "movie" | "tv", id: number) =>
   tmdbFetch<ListResponse<Movie>>(`/${type}/${id}/recommendations`);
 
+// Anime: discover TV with animation genre (16) and JP origin
+export const getAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    with_genres: "16",
+    with_original_language: "ja",
+    sort_by: "popularity.desc",
+  });
+
 // VidLink embed URLs
 export const getMoviePlayerUrl = (tmdbId: number) =>
   `https://vidlink.pro/movie/${tmdbId}`;
