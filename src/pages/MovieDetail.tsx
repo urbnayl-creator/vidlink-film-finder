@@ -2,55 +2,31 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Header from "@/components/Header";
+import SignInPrompt from "@/components/SignInPrompt";
 import { getMovieDetail, getCredits, getRecommendations, backdrop, img } from "@/lib/tmdb";
 import { Play, Plus, Check } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useWatchlist } from "@/hooks/useWatchlist";
-import { useToast } from "@/hooks/use-toast";
 
 const MovieDetail = () => {
   const { id } = useParams<{ id: string }>();
   const movieId = Number(id);
   const [activeTab, setActiveTab] = useState("overview");
+  const [showSignIn, setShowSignIn] = useState(false);
   const { user } = useAuth();
   const { isInWatchlist, toggle, isToggling } = useWatchlist();
-  const { toast } = useToast();
 
-  const { data: movie } = useQuery({
-    queryKey: ["movie", movieId],
-    queryFn: () => getMovieDetail(movieId),
-    enabled: !!movieId,
-  });
-
-  const { data: credits } = useQuery({
-    queryKey: ["credits", "movie", movieId],
-    queryFn: () => getCredits("movie", movieId),
-    enabled: !!movieId,
-  });
-
-  const { data: recs } = useQuery({
-    queryKey: ["recs", "movie", movieId],
-    queryFn: () => getRecommendations("movie", movieId),
-    enabled: !!movieId,
-  });
+  const { data: movie } = useQuery({ queryKey: ["movie", movieId], queryFn: () => getMovieDetail(movieId), enabled: !!movieId });
+  const { data: credits } = useQuery({ queryKey: ["credits", "movie", movieId], queryFn: () => getCredits("movie", movieId), enabled: !!movieId });
+  const { data: recs } = useQuery({ queryKey: ["recs", "movie", movieId], queryFn: () => getRecommendations("movie", movieId), enabled: !!movieId });
 
   const handleWatchlist = () => {
-    if (!user) {
-      toast({ title: "Sign in required", description: "Please sign in to add to your watchlist." });
-      return;
-    }
+    if (!user) { setShowSignIn(true); return; }
     if (movie) toggle({ mediaId: movie.id, mediaType: "movie", title: movie.title, posterPath: movie.poster_path });
   };
 
   if (!movie) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="pt-14 flex items-center justify-center h-[60vh]">
-          <div className="w-6 h-6 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin" />
-        </div>
-      </div>
-    );
+    return (<div className="min-h-screen bg-background"><Header /><div className="pt-14 flex items-center justify-center h-[60vh]"><div className="w-6 h-6 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin" /></div></div>);
   }
 
   const inList = isInWatchlist(movie.id, "movie");
@@ -59,6 +35,7 @@ const MovieDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <SignInPrompt open={showSignIn} onClose={() => setShowSignIn(false)} />
       <div className="relative h-[40vh] sm:h-[50vh] min-h-[280px] sm:min-h-[350px]">
         <img src={backdrop(movie.backdrop_path)} alt={movie.title} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
@@ -80,9 +57,7 @@ const MovieDetail = () => {
             <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-2xl">{movie.overview}</p>
 
             <div className="flex flex-wrap items-center gap-3 mb-8">
-              <Link to={`/watch/movie/${movie.id}`} className="btn-glow">
-                <Play className="w-4 h-4" /> Play Now
-              </Link>
+              <Link to={`/watch/movie/${movie.id}`} className="btn-glow"><Play className="w-4 h-4" /> Play Now</Link>
               <button onClick={handleWatchlist} disabled={isToggling} className="btn-glow">
                 {inList ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 {inList ? "In Watchlist" : "Watchlist"}

@@ -2,20 +2,20 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Header from "@/components/Header";
+import SignInPrompt from "@/components/SignInPrompt";
 import { getTvDetail, getCredits, getRecommendations, getTvSeasonEpisodes, backdrop, img } from "@/lib/tmdb";
 import { Play, Plus, Check } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useWatchlist } from "@/hooks/useWatchlist";
-import { useToast } from "@/hooks/use-toast";
 
 const TvDetail = () => {
   const { id } = useParams<{ id: string }>();
   const tvId = Number(id);
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedSeason, setSelectedSeason] = useState(1);
+  const [showSignIn, setShowSignIn] = useState(false);
   const { user } = useAuth();
   const { isInWatchlist, toggle, isToggling } = useWatchlist();
-  const { toast } = useToast();
 
   const { data: show } = useQuery({ queryKey: ["tv", tvId], queryFn: () => getTvDetail(tvId), enabled: !!tvId });
   const { data: credits } = useQuery({ queryKey: ["credits", "tv", tvId], queryFn: () => getCredits("tv", tvId), enabled: !!tvId });
@@ -23,7 +23,7 @@ const TvDetail = () => {
   const { data: recs } = useQuery({ queryKey: ["recs", "tv", tvId], queryFn: () => getRecommendations("tv", tvId), enabled: !!tvId });
 
   const handleWatchlist = () => {
-    if (!user) { toast({ title: "Sign in required", description: "Please sign in to add to your watchlist." }); return; }
+    if (!user) { setShowSignIn(true); return; }
     if (show) toggle({ mediaId: show.id, mediaType: "tv", title: show.name || "", posterPath: show.poster_path });
   };
 
@@ -37,6 +37,7 @@ const TvDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <SignInPrompt open={showSignIn} onClose={() => setShowSignIn(false)} />
       <div className="relative h-[40vh] sm:h-[50vh] min-h-[280px] sm:min-h-[350px]">
         <img src={backdrop(show.backdrop_path)} alt={show.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
