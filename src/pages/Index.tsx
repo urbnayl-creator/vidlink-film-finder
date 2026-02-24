@@ -10,9 +10,9 @@ import { getTrending, getPopular, getTopRated, getAnime, getPopularTvNoAnime, ge
 const Index = () => {
   const { data: trending } = useQuery({ queryKey: ["trending"], queryFn: () => getTrending("all") });
   const { data: popularMovies } = useQuery({ queryKey: ["popular", "movie"], queryFn: () => getPopular("movie") });
-  const { data: popularTv } = useQuery({ queryKey: ["popular", "tv"], queryFn: () => getPopular("tv") });
+  const { data: popularTv } = useQuery({ queryKey: ["popular", "tv", "no-anime"], queryFn: getPopularTvNoAnime });
   const { data: topMovies } = useQuery({ queryKey: ["topRated", "movie"], queryFn: () => getTopRated("movie") });
-  const { data: topTv } = useQuery({ queryKey: ["topRated", "tv"], queryFn: () => getTopRated("tv") });
+  const { data: topTv } = useQuery({ queryKey: ["topRated", "tv", "no-anime"], queryFn: getTopRatedTvNoAnime });
   const { data: anime } = useQuery({ queryKey: ["anime"], queryFn: () => getAnime() });
 
   const heroMovies = trending?.results?.slice(0, 5) || [];
