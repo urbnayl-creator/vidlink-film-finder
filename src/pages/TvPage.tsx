@@ -1,22 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/Header";
 import MediaCarousel from "@/components/MediaCarousel";
-import { getPopular, getTopRated, getTrending } from "@/lib/tmdb";
+import { getPopularTvNoAnime, getTopRatedTvNoAnime, getTrendingTvNoAnime } from "@/lib/tmdb";
 
 const TvPage = () => {
   const { data: popular } = useQuery({
-    queryKey: ["popular", "tv"],
-    queryFn: () => getPopular("tv"),
+    queryKey: ["popular", "tv", "no-anime"],
+    queryFn: getPopularTvNoAnime,
   });
 
   const { data: topRated } = useQuery({
-    queryKey: ["topRated", "tv"],
-    queryFn: () => getTopRated("tv"),
+    queryKey: ["topRated", "tv", "no-anime"],
+    queryFn: getTopRatedTvNoAnime,
   });
 
   const { data: trending } = useQuery({
-    queryKey: ["trending", "tv"],
-    queryFn: () => getTrending("tv"),
+    queryKey: ["trending", "tv", "no-anime"],
+    queryFn: getTrendingTvNoAnime,
   });
 
   return (
