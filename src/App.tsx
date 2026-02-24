@@ -11,6 +11,8 @@ import Watch from "./pages/Watch";
 import SearchPage from "./pages/SearchPage";
 import MoviesPage from "./pages/MoviesPage";
 import TvPage from "./pages/TvPage";
+import AnimePage from "./pages/AnimePage";
+import GenrePage from "./pages/GenrePage";
 import AuthPage from "./pages/AuthPage";
 import WatchlistPage from "./pages/WatchlistPage";
 import NotFound from "./pages/NotFound";
