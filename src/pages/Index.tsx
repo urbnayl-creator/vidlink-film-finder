@@ -5,7 +5,7 @@ import MediaCarousel from "@/components/MediaCarousel";
 import AdBlockPopup from "@/components/AdBlockPopup";
 import ContinueWatching from "@/components/ContinueWatching";
 import Footer from "@/components/Footer";
-import { getTrending, getPopular, getTopRated, getAnime } from "@/lib/tmdb";
+import { getTrending, getPopular, getTopRated, getAnime, getPopularTvNoAnime, getTopRatedTvNoAnime } from "@/lib/tmdb";
 
 const Index = () => {
   const { data: trending } = useQuery({ queryKey: ["trending"], queryFn: () => getTrending("all") });
