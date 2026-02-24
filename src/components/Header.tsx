@@ -193,8 +193,11 @@ const Header = () => {
               <Link to="/tv" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                 <Tv className="w-4 h-4" /> TV Shows
               </Link>
-              <Link to="/tv?tab=anime" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+              <Link to="/anime" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                 <AnimeIcon /> Anime
+              </Link>
+              <Link to="/genre/movie" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+                <Grid3X3 className="w-4 h-4" /> Genres
               </Link>
 
               {user ? (
