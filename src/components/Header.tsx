@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Home, Film, Tv, ChevronDown, User, Menu, LogOut, Heart } from "lucide-react";
+import { Search, Home, Film, Tv, ChevronDown, User, Menu, LogOut, Heart, Grid3X3 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -112,9 +112,14 @@ const Header = () => {
                   </div>
                 </div>
 
-                <Link to="/tv?tab=anime" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                <Link to="/anime" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                   <AnimeIcon />
                   <span>Anime</span>
+                </Link>
+
+                <Link to="/genre/movie" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                  <Grid3X3 className="w-3.5 h-3.5" />
+                  <span>Genres</span>
                 </Link>
               </nav>
             </div>
@@ -188,8 +193,11 @@ const Header = () => {
               <Link to="/tv" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                 <Tv className="w-4 h-4" /> TV Shows
               </Link>
-              <Link to="/tv?tab=anime" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+              <Link to="/anime" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                 <AnimeIcon /> Anime
+              </Link>
+              <Link to="/genre/movie" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+                <Grid3X3 className="w-4 h-4" /> Genres
               </Link>
 
               {user ? (

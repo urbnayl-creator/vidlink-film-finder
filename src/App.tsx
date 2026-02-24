@@ -11,6 +11,8 @@ import Watch from "./pages/Watch";
 import SearchPage from "./pages/SearchPage";
 import MoviesPage from "./pages/MoviesPage";
 import TvPage from "./pages/TvPage";
+import AnimePage from "./pages/AnimePage";
+import GenrePage from "./pages/GenrePage";
 import AuthPage from "./pages/AuthPage";
 import WatchlistPage from "./pages/WatchlistPage";
 import NotFound from "./pages/NotFound";
@@ -28,6 +30,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/movies" element={<MoviesPage />} />
             <Route path="/tv" element={<TvPage />} />
+            <Route path="/anime" element={<AnimePage />} />
+            <Route path="/genre/:type" element={<GenrePage />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
             <Route path="/tv/:id" element={<TvDetail />} />
             <Route path="/watch/:type/:id" element={<Watch />} />
