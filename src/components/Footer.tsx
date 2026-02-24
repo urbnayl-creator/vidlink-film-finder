@@ -1,3 +1,5 @@
+import heartIcon from "@/assets/heart-icon.webp";
+
 const Footer = () => {
   return (
     <footer className="border-t border-border mt-16">
@@ -31,9 +33,7 @@ const Footer = () => {
           {/* Made with love */}
           <p className="text-sm text-muted-foreground flex items-center gap-1.5">
             Made With{" "}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="hsl(0 84.2% 60.2%)" stroke="none">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>{" "}
+            <img src={heartIcon} alt="love" className="w-4 h-4 inline-block" />{" "}
             By <span className="text-foreground font-medium">Ayl</span>
           </p>
         </div>

@@ -103,6 +103,51 @@ export const getAnime = () =>
     sort_by: "popularity.desc",
   });
 
+// Get TV shows excluding animation genre
+export const getTvShows = (sort: string = "popularity.desc") =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    without_genres: "16",
+    sort_by: sort,
+  });
+
+export const getPopularTvNoAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    without_genres: "16",
+    sort_by: "popularity.desc",
+  });
+
+export const getTopRatedTvNoAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    without_genres: "16",
+    sort_by: "vote_average.desc",
+    "vote_count.gte": "200",
+  });
+
+export const getTrendingTvNoAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/trending/tv/week").then(res => ({
+    ...res,
+    results: res.results.filter(item => !item.genre_ids?.includes(16)),
+  }));
+
+// Genre helpers
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export const getMovieGenres = () =>
+  tmdbFetch<{ genres: Genre[] }>("/genre/movie/list");
+
+export const getTvGenres = () =>
+  tmdbFetch<{ genres: Genre[] }>("/genre/tv/list");
+
+export const discoverByGenre = (type: "movie" | "tv", genreId: number, page: number = 1) =>
+  tmdbFetch<ListResponse<Movie>>(`/discover/${type}`, {
+    with_genres: genreId.toString(),
+    sort_by: "popularity.desc",
+    page: page.toString(),
+  });
+
 // VidLink embed URLs
 export const getMoviePlayerUrl = (tmdbId: number) =>
   `https://vidlink.pro/movie/${tmdbId}`;
