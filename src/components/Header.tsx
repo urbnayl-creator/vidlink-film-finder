@@ -112,9 +112,14 @@ const Header = () => {
                   </div>
                 </div>
 
-                <Link to="/tv?tab=anime" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                <Link to="/anime" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                   <AnimeIcon />
                   <span>Anime</span>
+                </Link>
+
+                <Link to="/genre/movie" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                  <Grid3X3 className="w-3.5 h-3.5" />
+                  <span>Genres</span>
                 </Link>
               </nav>
             </div>
