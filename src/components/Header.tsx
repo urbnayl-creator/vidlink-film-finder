@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Home, Film, Tv, ChevronDown, User, Menu, LogOut, Heart } from "lucide-react";
+import { Search, Home, Film, Tv, ChevronDown, User, Menu, LogOut, Heart, Grid3X3 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
