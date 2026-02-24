@@ -1,7 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Home, Film, Tv, ChevronDown, User, Menu, X, LogOut, Heart } from "lucide-react";
+import { Search, Home, Film, Tv, ChevronDown, User, Menu, LogOut, Heart } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+
+const AnimeIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+    <line x1="9" y1="9" x2="9.01" y2="9" />
+    <line x1="15" y1="9" x2="15.01" y2="9" />
+  </svg>
+);
 
 const Header = () => {
   const [query, setQuery] = useState("");
@@ -44,6 +53,12 @@ const Header = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    setMobileMenuOpen(false);
+    await signOut();
+    navigate("/");
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50">
@@ -74,7 +89,7 @@ const Header = () => {
                     <span>Movies</span>
                     <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${moviesOpen ? 'rotate-180' : ''}`} />
                   </button>
-                  <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-300 origin-top ${moviesOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
+                  <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-200 origin-top ${moviesOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
                     <Link to="/movies" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Movies</Link>
                     <Link to="/movies?tab=top" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Top Rated</Link>
                     <Link to="/movies?tab=trending" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Trending</Link>
@@ -90,47 +105,43 @@ const Header = () => {
                     <span>TV Shows</span>
                     <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${tvOpen ? 'rotate-180' : ''}`} />
                   </button>
-                  <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-300 origin-top ${tvOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
+                  <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-200 origin-top ${tvOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
                     <Link to="/tv" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Shows</Link>
                     <Link to="/tv?tab=top" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Top Rated</Link>
                     <Link to="/tv?tab=trending" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Trending</Link>
                   </div>
                 </div>
+
+                <Link to="/tv?tab=anime" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                  <AnimeIcon />
+                  <span>Anime</span>
+                </Link>
               </nav>
             </div>
 
             {/* Right */}
             <div className="flex items-center gap-2">
-              {/* Desktop search - slide left */}
+              {/* Desktop search */}
               <div className="relative hidden sm:flex items-center">
-                <form onSubmit={handleSearch} className={`flex items-center transition-all duration-400 ease-out overflow-hidden ${searchExpanded ? 'w-52 lg:w-64' : 'w-0'}`}>
+                <form onSubmit={handleSearch} className={`flex items-center transition-all duration-300 ease-out overflow-hidden ${searchExpanded ? 'w-52 lg:w-64' : 'w-0'}`}>
                   <div className="flex items-center bg-secondary/30 border border-border/50 rounded-full overflow-hidden w-full">
-                    <input
-                      ref={searchRef}
-                      type="text"
-                      placeholder="Search..."
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                    <input ref={searchRef} type="text" placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)}
                       onBlur={() => { if (!query) setSearchExpanded(false); }}
-                      className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground px-3 py-1.5 w-full focus:outline-none"
-                    />
+                      className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground px-3 py-1.5 w-full focus:outline-none" />
                   </div>
                 </form>
-                <button
-                  onClick={() => setSearchExpanded(!searchExpanded)}
-                  className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40"
-                >
+                <button onClick={() => setSearchExpanded(!searchExpanded)} className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                   <Search className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Desktop user button */}
+              {/* Desktop user */}
               {user ? (
                 <div className="hidden sm:flex items-center gap-1">
                   <Link to="/watchlist" className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                     <Heart className="w-4 h-4" />
                   </Link>
-                  <button onClick={() => signOut()} className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                  <button onClick={handleSignOut} className="p-2 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                     <LogOut className="w-4 h-4" />
                   </button>
                 </div>
@@ -142,31 +153,28 @@ const Header = () => {
               )}
 
               {/* Mobile hamburger */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors">
                 <Menu className="w-5 h-5" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile menu - slides down from navbar */}
-        <div className={`md:hidden transition-all duration-400 ease-out overflow-hidden mx-4 ${mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        {/* Mobile menu */}
+        <div
+          className="md:hidden overflow-hidden mx-4"
+          style={{
+            maxHeight: mobileMenuOpen ? '500px' : '0',
+            opacity: mobileMenuOpen ? 1 : 0,
+            transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease',
+          }}
+        >
           <div className="glass-nav rounded-b-2xl border-t-0 rounded-t-none px-5 pb-5 pt-3 space-y-4">
-            {/* Mobile search */}
             <form onSubmit={handleSearch}>
               <div className="flex items-center bg-secondary/30 border border-border/50 rounded-full overflow-hidden">
                 <Search className="w-3.5 h-3.5 text-muted-foreground ml-3" />
-                <input
-                  ref={mobileSearchRef}
-                  type="text"
-                  placeholder="Search..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground px-2.5 py-2 w-full focus:outline-none"
-                />
+                <input ref={mobileSearchRef} type="text" placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)}
+                  className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground px-2.5 py-2 w-full focus:outline-none" />
               </div>
             </form>
 
@@ -180,14 +188,16 @@ const Header = () => {
               <Link to="/tv" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                 <Tv className="w-4 h-4" /> TV Shows
               </Link>
+              <Link to="/tv?tab=anime" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
+                <AnimeIcon /> Anime
+              </Link>
 
-              {/* Login/Logout in mobile menu */}
               {user ? (
                 <>
                   <Link to="/watchlist" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
                     <Heart className="w-4 h-4" /> Watchlist
                   </Link>
-                  <button onClick={() => { signOut(); setMobileMenuOpen(false); }} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors w-full text-left">
+                  <button onClick={handleSignOut} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors w-full text-left">
                     <LogOut className="w-4 h-4" /> Sign Out
                   </button>
                 </>

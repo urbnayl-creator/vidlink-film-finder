@@ -1,9 +1,9 @@
 import { useParams, useSearchParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import { getMovieDetail, getTvDetail, getMoviePlayerUrl, getTvPlayerUrl } from "@/lib/tmdb";
-import { ArrowLeft } from "lucide-react";
+import { getMovieDetail, getTvDetail, getTvSeasonEpisodes, getMoviePlayerUrl, getTvPlayerUrl, img } from "@/lib/tmdb";
+import { ArrowLeft, Play } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useWatchHistory } from "@/hooks/useWatchHistory";
 
@@ -16,6 +16,7 @@ const Watch = () => {
   const episode = Number(searchParams.get("e") || 1);
   const { user } = useAuth();
   const { addToHistory } = useWatchHistory();
+  const [selectedSeason, setSelectedSeason] = useState(season);
 
   const { data: detail } = useQuery({
     queryKey: [type, mediaId],
@@ -23,7 +24,12 @@ const Watch = () => {
     enabled: !!mediaId,
   });
 
-  // Track watch history when user is logged in
+  const { data: episodes } = useQuery({
+    queryKey: ["episodes", mediaId, selectedSeason],
+    queryFn: () => getTvSeasonEpisodes(mediaId, selectedSeason),
+    enabled: !isMovie && !!mediaId,
+  });
+
   useEffect(() => {
     if (user && detail) {
       addToHistory({
@@ -68,6 +74,55 @@ const Watch = () => {
             title={`Watch ${title}`}
           />
         </div>
+
+        {/* Episodes & Seasons for TV */}
+        {!isMovie && detail?.seasons && (
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Episodes</h2>
+            <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide pb-2">
+              {detail.seasons.filter((s) => s.season_number > 0).map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => setSelectedSeason(s.season_number)}
+                  className={`shrink-0 px-3 py-1.5 rounded-md text-xs font-medium border transition-colors ${selectedSeason === s.season_number ? "border-foreground text-foreground" : "border-border text-muted-foreground hover:text-foreground"}`}
+                >
+                  Season {s.season_number}
+                </button>
+              ))}
+            </div>
+            <div className="space-y-2">
+              {episodes?.episodes?.map((ep) => {
+                const isActive = ep.season_number === season && ep.episode_number === episode;
+                return (
+                  <Link
+                    key={ep.id}
+                    to={`/watch/tv/${mediaId}?s=${ep.season_number}&e=${ep.episode_number}`}
+                    className={`flex gap-4 p-3 rounded-lg border transition-colors group ${isActive ? "border-foreground/30 bg-secondary/60" : "border-border hover:bg-secondary/50"}`}
+                  >
+                    <div className="w-32 h-18 rounded-md overflow-hidden bg-secondary shrink-0 relative">
+                      {ep.still_path ? (
+                        <img src={img(ep.still_path, "w300")} alt={ep.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs aspect-video">No Image</div>
+                      )}
+                      {isActive && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                          <Play className="w-5 h-5 text-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-medium ${isActive ? "text-foreground" : "text-foreground"}`}>
+                        E{ep.episode_number}. {ep.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{ep.overview}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
