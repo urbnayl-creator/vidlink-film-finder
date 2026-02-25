@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/Header";
 import MediaCarousel from "@/components/MediaCarousel";
+import Footer from "@/components/Footer";
 import { getPopularTvNoAnime, getTopRatedTvNoAnime, getTrendingTvNoAnime } from "@/lib/tmdb";
 
 const TvPage = () => {
@@ -28,6 +29,7 @@ const TvPage = () => {
         <MediaCarousel title="Popular" subtitle="Top picks from the TV world." items={popular?.results || []} type="tv" />
         <MediaCarousel title="Top Rated" subtitle="The best shows ever made." items={topRated?.results || []} type="tv" />
       </div>
+      <Footer />
     </div>
   );
 };

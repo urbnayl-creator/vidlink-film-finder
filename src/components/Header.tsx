@@ -62,8 +62,8 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="mx-4 mt-3 glass-nav rounded-2xl">
-          <div className="max-w-[1280px] mx-auto px-5 h-12 flex items-center justify-between">
+        <div className="max-w-fit mx-auto mt-3 glass-nav rounded-2xl">
+          <div className="px-5 h-12 flex items-center justify-between">
             {/* Left */}
             <div className="flex items-center gap-1">
               <Link to="/" className="mr-3 text-foreground">
@@ -167,7 +167,7 @@ const Header = () => {
 
         {/* Mobile menu */}
         <div
-          className="md:hidden overflow-hidden mx-4"
+          className="md:hidden overflow-hidden max-w-fit mx-auto"
           style={{
             maxHeight: mobileMenuOpen ? '500px' : '0',
             opacity: mobileMenuOpen ? 1 : 0,

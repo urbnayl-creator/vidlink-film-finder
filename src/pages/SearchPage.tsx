@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import MediaCard from "@/components/MediaCard";
 import { searchMulti } from "@/lib/tmdb";
 
@@ -35,13 +36,14 @@ const SearchPage = () => {
         ) : results.length === 0 && query ? (
           <p className="text-muted-foreground">No results found.</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="media-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3">
             {results.map((item) => (
               <MediaCard key={item.id} item={item} />
             ))}
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
