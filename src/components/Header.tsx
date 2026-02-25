@@ -74,20 +74,20 @@ const Header = () => {
               </Link>
 
               {/* Desktop nav */}
-              <nav className="hidden md:flex items-center gap-0.5">
-                <Link to="/" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+              <nav className="flex items-center gap-0.5">
+                <Link to="/" className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                   <Home className="w-3.5 h-3.5" />
-                  <span>Home</span>
+                  <span className="hidden md:inline">Home</span>
                 </Link>
 
                 <div ref={moviesRef} className="relative">
                   <button
                     onClick={() => { setMoviesOpen(!moviesOpen); setTvOpen(false); }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40"
+                    className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40"
                   >
                     <Film className="w-3.5 h-3.5" />
-                    <span>Movies</span>
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${moviesOpen ? 'rotate-180' : ''}`} />
+                    <span className="hidden md:inline">Movies</span>
+                    <ChevronDown className={`w-3 h-3 hidden md:block transition-transform duration-300 ${moviesOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-200 origin-top ${moviesOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
                     <Link to="/movies" onClick={() => setMoviesOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Movies</Link>
@@ -99,11 +99,11 @@ const Header = () => {
                 <div ref={tvRef} className="relative">
                   <button
                     onClick={() => { setTvOpen(!tvOpen); setMoviesOpen(false); }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40"
+                    className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40"
                   >
                     <Tv className="w-3.5 h-3.5" />
-                    <span>TV Shows</span>
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${tvOpen ? 'rotate-180' : ''}`} />
+                    <span className="hidden md:inline">TV Shows</span>
+                    <ChevronDown className={`w-3 h-3 hidden md:block transition-transform duration-300 ${tvOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <div className={`absolute top-full left-0 mt-2 w-44 glass-nav rounded-xl shadow-2xl py-1.5 z-50 transition-all duration-200 origin-top ${tvOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
                     <Link to="/tv" onClick={() => setTvOpen(false)} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">Popular Shows</Link>
@@ -112,14 +112,14 @@ const Header = () => {
                   </div>
                 </div>
 
-                <Link to="/anime" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                <Link to="/anime" className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                   <AnimeIcon />
-                  <span>Anime</span>
+                  <span className="hidden md:inline">Anime</span>
                 </Link>
 
-                <Link to="/genre/movie" className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
+                <Link to="/genre/movie" className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary/40">
                   <Grid3X3 className="w-3.5 h-3.5" />
-                  <span>Genres</span>
+                  <span className="hidden md:inline">Genres</span>
                 </Link>
               </nav>
             </div>
@@ -158,7 +158,7 @@ const Header = () => {
               )}
 
               {/* Mobile hamburger */}
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors">
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="sm:hidden p-2 text-muted-foreground hover:text-foreground transition-colors">
                 <Menu className="w-5 h-5" />
               </button>
             </div>
@@ -167,7 +167,7 @@ const Header = () => {
 
         {/* Mobile menu */}
         <div
-          className="md:hidden overflow-hidden w-[calc(100%-2rem)] max-w-sm mx-auto"
+          className="sm:hidden overflow-hidden w-[calc(100%-2rem)] max-w-sm mx-auto"
           style={{
             maxHeight: mobileMenuOpen ? '500px' : '0',
             opacity: mobileMenuOpen ? 1 : 0,
@@ -184,21 +184,6 @@ const Header = () => {
             </form>
 
             <nav className="flex flex-col gap-1">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
-                <Home className="w-4 h-4" /> Home
-              </Link>
-              <Link to="/movies" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
-                <Film className="w-4 h-4" /> Movies
-              </Link>
-              <Link to="/tv" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
-                <Tv className="w-4 h-4" /> TV Shows
-              </Link>
-              <Link to="/anime" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
-                <AnimeIcon /> Anime
-              </Link>
-              <Link to="/genre/movie" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-secondary/40 transition-colors">
-                <Grid3X3 className="w-4 h-4" /> Genres
-              </Link>
 
               {user ? (
                 <>
