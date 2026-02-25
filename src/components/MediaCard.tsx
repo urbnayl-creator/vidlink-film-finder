@@ -14,7 +14,7 @@ const MediaCard = ({ item, type }: MediaCardProps) => {
   return (
     <Link
       to={link}
-      className="group shrink-0 w-[120px] sm:w-[150px] md:w-[170px] block"
+      className="group shrink-0 w-[120px] sm:w-[150px] md:w-[170px] block [.media-grid_&]:w-full"
     >
       <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-secondary">
         <img
