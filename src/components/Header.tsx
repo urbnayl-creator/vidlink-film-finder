@@ -167,14 +167,14 @@ const Header = () => {
 
         {/* Mobile menu */}
         <div
-          className="md:hidden overflow-hidden max-w-fit mx-auto"
+          className="md:hidden overflow-hidden w-[calc(100%-2rem)] max-w-sm mx-auto"
           style={{
             maxHeight: mobileMenuOpen ? '500px' : '0',
             opacity: mobileMenuOpen ? 1 : 0,
             transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease',
           }}
         >
-          <div className="glass-nav rounded-b-2xl border-t-0 rounded-t-none px-5 pb-5 pt-3 space-y-4">
+          <div className="glass-nav rounded-b-2xl border-t-0 rounded-t-none px-4 pb-4 pt-3 space-y-3">
             <form onSubmit={handleSearch}>
               <div className="flex items-center bg-secondary/30 border border-border/50 rounded-full overflow-hidden">
                 <Search className="w-3.5 h-3.5 text-muted-foreground ml-3" />
