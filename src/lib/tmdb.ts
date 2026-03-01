@@ -103,6 +103,35 @@ export const getAnime = () =>
     sort_by: "popularity.desc",
   });
 
+export const getTopRatedAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    with_genres: "16",
+    with_original_language: "ja",
+    sort_by: "vote_average.desc",
+    "vote_count.gte": "200",
+  });
+
+export const getTrendingAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/trending/tv/week").then(res => ({
+    ...res,
+    results: res.results.filter(item => item.genre_ids?.includes(16)),
+  }));
+
+export const getAnimeAction = () =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    with_genres: "16,28",
+    with_original_language: "ja",
+    sort_by: "popularity.desc",
+  });
+
+export const getNewAnime = () =>
+  tmdbFetch<ListResponse<Movie>>("/discover/tv", {
+    with_genres: "16",
+    with_original_language: "ja",
+    sort_by: "first_air_date.desc",
+    "vote_count.gte": "10",
+  });
+
 // Get TV shows excluding animation genre
 export const getTvShows = (sort: string = "popularity.desc") =>
   tmdbFetch<ListResponse<Movie>>("/discover/tv", {
