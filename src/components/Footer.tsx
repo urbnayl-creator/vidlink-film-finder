@@ -11,7 +11,7 @@ const Footer = () => {
               href="https://discord.gg/aerox"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="p-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all duration-300 hover:scale-110 active:scale-95"
               aria-label="Discord"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -20,7 +20,7 @@ const Footer = () => {
             </a>
             <a
               href="mailto:businesswithmikasa@gmail.com"
-              className="p-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="p-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all duration-300 hover:scale-110 active:scale-95"
               aria-label="Email"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -33,7 +33,7 @@ const Footer = () => {
           {/* Made with love */}
           <p className="text-sm text-muted-foreground flex items-center gap-1.5">
             Made With{" "}
-            <img src={heartIcon} alt="love" className="w-4 h-4 inline-block" />{" "}
+            <img src={heartIcon} alt="love" className="w-4 h-4 inline-block animate-float" />{" "}
             By <span className="text-foreground font-medium">Ayl</span>
           </p>
         </div>
