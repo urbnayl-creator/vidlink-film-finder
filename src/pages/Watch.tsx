@@ -101,7 +101,7 @@ const Watch = () => {
                 <h2 className="text-xl font-bold text-foreground">{title}</h2>
                 {detail.tagline && <p className="text-sm text-muted-foreground italic">{detail.tagline}</p>}
                 <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-yellow-500" /> {detail.vote_average?.toFixed(1)}</span>
+                  <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-accent-foreground" /> {detail.vote_average?.toFixed(1)}</span>
                   {detail.runtime && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {detail.runtime} min</span>}
                   {(detail.release_date || detail.first_air_date) && (
                     <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {(detail.release_date || detail.first_air_date)?.split("-")[0]}</span>
