@@ -2,8 +2,10 @@ import { useParams, useSearchParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
-import { getMovieDetail, getTvDetail, getTvSeasonEpisodes, getMoviePlayerUrl, getTvPlayerUrl, img } from "@/lib/tmdb";
-import { ArrowLeft, Play } from "lucide-react";
+import Footer from "@/components/Footer";
+import { getMovieDetail, getTvDetail, getTvSeasonEpisodes, getMoviePlayerUrl, getTvPlayerUrl, getCredits, getRecommendations, img, backdrop } from "@/lib/tmdb";
+import MediaCarousel from "@/components/MediaCarousel";
+import { ArrowLeft, Play, Star, Clock, Calendar } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useWatchHistory } from "@/hooks/useWatchHistory";
 
@@ -21,6 +23,18 @@ const Watch = () => {
   const { data: detail } = useQuery({
     queryKey: [type, mediaId],
     queryFn: () => (isMovie ? getMovieDetail(mediaId) : getTvDetail(mediaId)),
+    enabled: !!mediaId,
+  });
+
+  const { data: credits } = useQuery({
+    queryKey: ["credits", type, mediaId],
+    queryFn: () => getCredits(type as "movie" | "tv", mediaId),
+    enabled: !!mediaId,
+  });
+
+  const { data: recommendations } = useQuery({
+    queryKey: ["recommendations", type, mediaId],
+    queryFn: () => getRecommendations(type as "movie" | "tv", mediaId),
     enabled: !!mediaId,
   });
 
@@ -48,6 +62,7 @@ const Watch = () => {
     : getTvPlayerUrl(mediaId, season, episode);
 
   const title = detail?.title || detail?.name || "Loading...";
+  const cast = credits?.cast?.slice(0, 6) || [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,9 +90,46 @@ const Watch = () => {
           />
         </div>
 
+        {/* Movie/Show Details */}
+        {detail && (
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="shrink-0 w-32 md:w-40 hidden sm:block">
+                <img src={img(detail.poster_path)} alt={title} className="w-full rounded-lg" />
+              </div>
+              <div className="flex-1 space-y-3">
+                <h2 className="text-xl font-bold text-foreground">{title}</h2>
+                {detail.tagline && <p className="text-sm text-muted-foreground italic">{detail.tagline}</p>}
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-accent-foreground" /> {detail.vote_average?.toFixed(1)}</span>
+                  {detail.runtime && <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {detail.runtime} min</span>}
+                  {(detail.release_date || detail.first_air_date) && (
+                    <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {(detail.release_date || detail.first_air_date)?.split("-")[0]}</span>
+                  )}
+                  {detail.number_of_seasons && <span>{detail.number_of_seasons} Season{detail.number_of_seasons > 1 ? "s" : ""}</span>}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {detail.genres?.map((g) => (
+                    <span key={g.id} className="px-2.5 py-1 text-xs rounded-full border border-border text-muted-foreground">{g.name}</span>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{detail.overview}</p>
+                {cast.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      <span className="text-foreground font-medium">Cast: </span>
+                      {cast.map((c) => c.name).join(", ")}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Episodes & Seasons for TV */}
         {!isMovie && detail?.seasons && (
-          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6 pb-8">
             <h2 className="text-lg font-semibold text-foreground mb-4">Episodes</h2>
             <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide pb-2">
               {detail.seasons.filter((s) => s.season_number > 0).map((s) => (
@@ -112,7 +164,7 @@ const Watch = () => {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium ${isActive ? "text-foreground" : "text-foreground"}`}>
+                      <p className="text-sm font-medium text-foreground">
                         E{ep.episode_number}. {ep.name}
                       </p>
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{ep.overview}</p>
@@ -123,7 +175,15 @@ const Watch = () => {
             </div>
           </div>
         )}
+
+        {/* Recommendations */}
+        {recommendations?.results && recommendations.results.length > 0 && (
+          <div className="max-w-[1280px] mx-auto pb-8">
+            <MediaCarousel title="You Might Also Like" items={recommendations.results} type={type as "movie" | "tv"} />
+          </div>
+        )}
       </div>
+      <Footer />
     </div>
   );
 };
