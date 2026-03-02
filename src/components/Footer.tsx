@@ -33,7 +33,7 @@ const Footer = () => {
           {/* Made with love */}
           <p className="text-sm text-muted-foreground flex items-center gap-1.5">
             Made With{" "}
-            <img src={heartIcon} alt="love" className="w-4 h-4 inline-block animate-float" />{" "}
+            <img src={heartIcon} alt="love" className="w-4 h-4 inline-block" />{" "}
             By <span className="text-foreground font-medium">Ayl</span>
           </p>
         </div>
