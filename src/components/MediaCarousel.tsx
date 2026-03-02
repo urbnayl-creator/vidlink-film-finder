@@ -39,7 +39,7 @@ const MediaCarousel = ({ title, subtitle, items, type }: MediaCarouselProps) => 
           <button
             onClick={() => scroll("left")}
             disabled={page === 0}
-            className="p-1 sm:p-1.5 border border-border rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 hover:border-foreground/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 active:scale-90"
+            className="p-1 sm:p-1.5 border border-border rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 hover:border-foreground/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
           >
             <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
