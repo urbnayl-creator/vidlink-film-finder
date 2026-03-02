@@ -11,7 +11,7 @@ const Footer = () => {
               href="https://discord.gg/aerox"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all duration-300 hover:scale-110 active:scale-95"
+              className="p-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all duration-300"
               aria-label="Discord"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
