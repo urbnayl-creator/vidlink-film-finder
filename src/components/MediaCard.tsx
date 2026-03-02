@@ -22,7 +22,7 @@ const MediaCard = ({ item, type }: MediaCardProps) => {
         <img
           src={img(item.poster_path)}
           alt={title}
-          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
         />
         {/* Hover overlay with gradient */}

@@ -25,7 +25,7 @@ const Index = () => {
       <AdBlockPopup />
       <main>
         {loadingTrending ? <SkeletonHero /> : <HeroBanner movies={heroMovies} />}
-        <div className="max-w-[1280px] mx-auto space-y-10 py-10 stagger-children">
+        <div className="max-w-[1280px] mx-auto space-y-10 py-10">
           <ContinueWatching />
           {loadingTrending ? <SkeletonCarousel /> : <MediaCarousel title="Trending Movies" subtitle="Stay on the pulse of what's hot in the movie scene." items={trending?.results?.filter(m => m.media_type === 'movie' || !m.media_type).slice(0, 20) || []} type="movie" />}
           {loadingPopMovies ? <SkeletonCarousel /> : <MediaCarousel title="Popular Movies" subtitle="The most popular movies right now." items={popularMovies?.results || []} type="movie" />}

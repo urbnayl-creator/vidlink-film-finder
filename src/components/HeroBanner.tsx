@@ -69,13 +69,13 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
         <>
           <button
             onClick={prev}
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-3 rounded-full glass-nav text-foreground/70 hover:text-foreground transition-all duration-300 opacity-0 group-hover/hero:opacity-100 hover:scale-110 active:scale-95"
+            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-3 rounded-full glass-nav text-foreground/70 hover:text-foreground transition-all duration-300 opacity-0 group-hover/hero:opacity-100"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={next}
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-3 rounded-full glass-nav text-foreground/70 hover:text-foreground transition-all duration-300 opacity-0 group-hover/hero:opacity-100 hover:scale-110 active:scale-95"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-10 p-2 sm:p-3 rounded-full glass-nav text-foreground/70 hover:text-foreground transition-all duration-300 opacity-0 group-hover/hero:opacity-100"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
