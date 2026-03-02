@@ -15,8 +15,8 @@ const AnimePage = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="max-w-[1280px] mx-auto pt-24 pb-16 space-y-10">
-        <h1 className="text-2xl font-bold text-foreground px-6 md:px-0 animate-fade-up">Anime</h1>
-        <div className="space-y-10 stagger-children">
+        <h1 className="text-2xl font-bold text-foreground px-6 md:px-0">Anime</h1>
+        <div className="space-y-10">
           {l3 ? <SkeletonCarousel /> : <MediaCarousel title="Trending Anime" subtitle="What's hot in the anime world right now." items={trending?.results || []} type="tv" />}
           {l1 ? <SkeletonCarousel /> : <MediaCarousel title="Popular Anime" subtitle="Most watched anime series." items={popular?.results || []} type="tv" />}
           {l2 ? <SkeletonCarousel /> : <MediaCarousel title="Top Rated Anime" subtitle="Highest rated anime of all time." items={topRated?.results || []} type="tv" />}
